@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { createCharacterSchema } from '../schemas/character.schema'
-import { prisma } from '../prisma'
+
 import {
   createCharacter,
   getAllCharacters,
@@ -9,13 +9,13 @@ import {
 const router = Router()
 
 router.post('/', async (req, res) => {
-  const parsed = createCharacterSchema.safeParse(req.body)
+  const parsed = createCharacterSchema.safeParse(req.body);
 
-if (!parsed.success) {
-  return res.status(400).json({
-    errors: parsed.error.issues,
-  })
-}
+  if (!parsed.success) {
+    return res.status(400).json({
+      errors: parsed.error.issues,
+    })
+  }
 
   const character = await createCharacter(parsed.data)
   res.status(201).json(character)
