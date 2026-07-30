@@ -4,5 +4,6 @@ CREATE TABLE "Character" (
     "name" TEXT NOT NULL,
     "class" TEXT NOT NULL,
     "equipment" TEXT NOT NULL,
+    "gold" INTEGER NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

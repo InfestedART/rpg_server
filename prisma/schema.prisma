@@ -17,5 +17,6 @@ model Character {
   name      String
   class     String
   equipment String
+  gold      Int      @default(0)
   createdAt DateTime @default(now())
 }

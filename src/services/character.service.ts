@@ -24,3 +24,14 @@ export async function deleteCharacter(id: number) {
     where: { id },
   })
 }
+
+export async function addGold(id: number, goldAmount: number) {
+  const character = await prisma.character.findUnique({ where: { id } });
+  if (!character) throw new Error('Character not found');
+
+  const newGold = Math.max(0, character.gold + goldAmount);
+  return prisma.character.update({
+    where: { id },
+    data: { gold: { increment: newGold } },
+  })
+}

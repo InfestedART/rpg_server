@@ -6,6 +6,7 @@ import {
   getAllCharacters,
   deleteCharacter,
   getCharacterById,
+  addGold,
 } from '../services/character.service'
 
 const router = Router()
@@ -34,7 +35,23 @@ router.get('/:id', async (req, res) => {
     return res.status(400).json({ error: 'Invalid ID' })
   }
 
-  const char = await getCharacterById(id)
+  const char = await getCharacterById(id);
+  res.json(char);
+})
+
+router.patch('/:id/add_gold/:gold', async (req, res) => {
+  const id = Number(req.params.id);
+  const gold = Number(req.params.gold);
+
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'Invalid character id' })
+  }
+
+  if (isNaN(gold) || gold < 0) {
+    return res.status(400).json({ error: 'Invalid Gold Amount' })
+  }
+
+  const char = await addGold(id, gold);
   res.json(char);
 })
 
