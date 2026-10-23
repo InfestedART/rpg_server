@@ -18,5 +18,7 @@ model Character {
   class     String
   equipment String
   gold      Int      @default(0)
+  xp        Int      @default(0)
+  inventory String   @default("[]")
   createdAt DateTime @default(now())
 }
