@@ -1,5 +1,5 @@
 import { prisma } from '../prisma'
-import type { CreateCharacterInput } from '../schemas/character.schema'
+import type { CreateCharacterInput, EquipmentType } from '../schemas/character.schema'
 
 export async function createCharacter(data: CreateCharacterInput) {
   return prisma.character.create({
@@ -43,42 +43,53 @@ export async function addXp(charId: number, xp: number) {
   const newXp = Math.max(0, character.xp + xp);
   return prisma.character.update({
     where: { id: charId },
-    data: { xp: { increment: newXp } },
+    data: { xp: newXp },
   })
 }
 
-export async function updateItems(charId: number, equipment: string, inventory: string) {
+export async function levelUp(charId: number) {
   const character = await prisma.character.findUnique({ where: { id: charId } });
   if (!character) throw new Error('Character not found');
 
-  console.log('==> inside service', equipment, inventory)
+  return prisma.character.update({
+    where: { id: charId },
+    data: {
+      level: { increment: 1 },
+      xp: 0,
+    },
+  })
+}
+
+export async function updateItems(charId: number, equipment: EquipmentType, inventory: string[]) {
+  const character = await prisma.character.findUnique({ where: { id: charId } });
+  if (!character) throw new Error('Character not found');
 
   return prisma.character.update({
     where: { id: charId },
     data: { 
-      equipment: JSON.stringify(equipment),
-      inventory: JSON.stringify(inventory),
+      equipment,
+      inventory,
     }
   })
 }
 
-export async function updateInventory(charId: number, inventory: string) {
+export async function updateInventory(charId: number, inventory: string[]) {
   const character = await prisma.character.findUnique({ where: { id: charId } });
   if (!character) throw new Error('Character not found');
 
   return prisma.character.update({
     where: { id: charId },
-    data: { inventory: JSON.stringify(inventory) }
+    data: { inventory: inventory }
   })
 }
 
-export async function updateEquipment(charId: number, equipment: string) {
+export async function updateEquipment(charId: number, equipment: EquipmentType) {
   const character = await prisma.character.findUnique({ where: { id: charId } });
   if (!character) throw new Error('Character not found');
 
   return prisma.character.update({
     where: { id: charId },
-    data: { equipment: JSON.stringify(equipment) }
+    data: { equipment: equipment }
   })
 }
 
